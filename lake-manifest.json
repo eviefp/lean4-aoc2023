@@ -1,0 +1,12 @@
+{"version": 6,
+ "packagesDir": "lake-packages",
+ "packages":
+ [{"git":
+   {"url": "https://github.com/leanprover/std4",
+    "subDir?": null,
+    "rev": "d628d7c5ebd68fec2f357c7e1c46197d0ec45c95",
+    "opts": {},
+    "name": "std",
+    "inputRev?": "stable",
+    "inherited": false}}],
+ "name": "aoc"}
