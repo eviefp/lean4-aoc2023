@@ -7,10 +7,17 @@ def optionToParser (o: Option α) (err: String) : Lean.Parsec α :=
     | .some res => pure res
     | .none => Lean.Parsec.fail err
 
+def iterator (iter: String.Iterator) : Lean.Parsec.ParseResult String.Iterator :=
+  Lean.Parsec.ParseResult.success iter iter
 
 def nat : Lean.Parsec Nat := do
   let optNat <- String.toNat? <$> Lean.Parsec.many1Chars Lean.Parsec.digit
   optionToParser optNat "failed to parse nat"
+
+def either (l: Lean.Parsec α) (r: Lean.Parsec β) : Lean.Parsec (α ⊕ β) := do
+  let left := Sum.inl <$> l
+  let right := Sum.inr <$> r
+  left <|> right
 
 /-- Warning: blows up in IO if the parsing fails -/
 def parseFile (fname: System.FilePath) (parser: Lean.Parsec α): IO α :=
