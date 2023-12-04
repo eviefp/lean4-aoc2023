@@ -59,11 +59,11 @@ def game: Parsec Game := do
   let gameId <- Parser.nat
   _ <- Parsec.pstring ": "
 
-  let gameSets <- Array.toList <$> Parsec.many1 cubeSample
+  let gameSets <- Parser.many1 cubeSample
 
   pure { id := gameId, sets := gameSets }
 
-def day1 : Parsec (List Game) := Array.toList <$> Parsec.many1 game
+def games: Parsec (List Game) := Parser.many1 game
 
 end Parser
 
@@ -82,14 +82,16 @@ def solve1 : List Game -> Nat :=
      ∘ List.filter predicate
 
 def solve2 : List Game -> Nat :=
-  let toPowerLevel : CubeSample -> Nat := fun cube => cube.blue * cube.green * cube.red
+  let toPowerLevel : CubeSample -> Nat :=
+    fun cube => cube.blue * cube.green * cube.red
 
   Monoid.Nat.Sum.Instance.foldMap toPowerLevel
     ∘ List.map CubeSample.Monoid.fold
     ∘ List.map Game.sets
 
 def main : IO Unit := do
-  let parsed1 <- Evie.Parser.parseFile { toString := "./data/day2-1" } Parser.day1
+  let parsed1 <-
+    Evie.Parser.parseFile { toString := "./data/day2-1" } Parser.games
 
   let result1 := solve1 parsed1
   IO.println s!"part1: {result1}"

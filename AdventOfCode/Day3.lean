@@ -13,10 +13,6 @@ structure Coordinate where
   y : Nat
 deriving BEq
 
-instance : ToString Coordinate where
-  toString c := s!"({c.x}, {c.y})"
-
-
 def Coordinate.move (coord: Coordinate) (dx: Int) (dy: Int) : Coordinate :=
   { x := (Int.ofNat coord.x + dx).toNat
   , y := (Int.ofNat coord.y + dy).toNat
@@ -30,15 +26,9 @@ structure Number where
   value : Nat
   coordinates : List Coordinate
 
-instance : ToString Number where
-  toString n := s!"({n.value}, {n.coordinates})"
-
 structure Symbol where
   symbol : Char
   coordinate : Coordinate
-
-instance : ToString Symbol where
-  toString s := s!"({s.symbol}, {s.coordinate})"
 
 def Symbol.isGear (s: Symbol) : Bool :=
   s.symbol == '*'
@@ -46,16 +36,6 @@ def Symbol.isGear (s: Symbol) : Bool :=
 structure Input where
   numbers : List Number
   symbols : List Symbol
-
-instance : ToString Input where
-  toString i :=
-    String.intercalate "\n"
-        [ "Numbers: \n"
-        , "  " ++ String.intercalate "\n  " (i.numbers.map toString)
-        , "\nSymbols: \n"
-        , "  " ++ String.intercalate "\n  " (i.symbols.map toString)
-        ]
-
 
 def Input.Monoid.Instance: Monoid.Monoid :=
   { Carrier := Input
@@ -100,10 +80,7 @@ def line (y: Nat) : Parsec Input := do
 
 def lines (xs: List String): Except String Input := do
   let go (xs: List Input) (zip: Nat × String) : Except String (List Input) := do
-    let next <-
-      Parsec.run
-        (Array.toList <$> (Parsec.many (Parsec.attempt $ line zip.fst)))
-        zip.snd
+    let next <- Parsec.run (Parser.many $ line zip.fst) zip.snd
     pure $ xs.append next
 
   let zip := List.zip (Nat.range 1 (xs.length + 1)) xs

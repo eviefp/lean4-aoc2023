@@ -10,6 +10,18 @@ structure Monoid where
 def Monoid.fold (M: Monoid) (xs: List M.Carrier): M.Carrier :=
   List.foldl M.op M.unit xs
 
+def Monoid.foldMapM
+  [Monad m]
+  (M: Monoid)
+  (f: α -> m M.Carrier)
+  (xs: List α)
+  : m M.Carrier :=
+  xs.foldlM
+    (fun acc a => do
+      let current <- f a
+      pure $ M.op acc current
+    ) M.unit
+
 def Monoid.foldMap (M: Monoid) (f: α -> M.Carrier) (xs: List α): M.Carrier :=
   M.fold $ xs.map f
 
