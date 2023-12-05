@@ -11,7 +11,7 @@ def iterator (iter: String.Iterator) : Lean.Parsec.ParseResult String.Iterator :
   Lean.Parsec.ParseResult.success iter iter
 
 def nat : Lean.Parsec Nat := do
-  let optNat <- String.toNat? <$> Lean.Parsec.many1Chars Lean.Parsec.digit
+  let optNat <- String.toNat? <$> Lean.Parsec.many1Chars (Lean.Parsec.attempt Lean.Parsec.digit)
   optionToParser optNat "failed to parse nat"
 
 def parseOptionalChar (c: Char): Lean.Parsec Unit := do

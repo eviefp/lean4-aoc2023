@@ -57,7 +57,9 @@ def Instance {α : Type}: Monoid :=
 
 end Last
 
-namespace Nat.Sum
+namespace Nat
+
+namespace Sum
 
 def Instance:  Monoid :=
   { Carrier := Nat
@@ -65,4 +67,21 @@ def Instance:  Monoid :=
   , op := Nat.add
   }
 
-end Nat.Sum
+end Sum
+
+namespace Min
+
+def compose: Option Nat -> Option Nat -> Option Nat
+  | some m, some n => some $ Nat.min m n
+  | o1    , o2     => o1 <|> o2
+
+-- Don't have Nat.MaxNumber so we have to make do with Option
+def Instance: Monoid :=
+  { Carrier := Option Nat
+  , unit := none
+  , op := compose
+  }
+
+end Min
+
+end Nat
