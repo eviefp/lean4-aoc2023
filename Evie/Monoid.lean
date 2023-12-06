@@ -69,6 +69,16 @@ def Instance:  Monoid :=
 
 end Sum
 
+namespace Product
+
+def Instance:  Monoid :=
+  { Carrier := Nat
+  , unit := 1
+  , op := Nat.mul
+  }
+
+end Product
+
 namespace Min
 
 def compose: Option Nat -> Option Nat -> Option Nat

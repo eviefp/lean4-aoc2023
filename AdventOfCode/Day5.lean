@@ -76,41 +76,7 @@ def Map.new: Array Process -> Map :=
   Map.mk ∘ flip Array.qsort Process.lt
 
 
-/--
-10,7 / 0,7
-r:            |-------|
-p: |-------|
-
-10,7 / 4,7
-r:     |-------|
-p: |-------|
-
-0,7 / 0,7
-r: |-------|
-p: |-------|
-
-0,7 / 0,10
-r: |-------|
-p: |----------|
-
-0,7 / 2,2
-r: |-------|
-p:   |--|
-
-0,7 / 2,5
-r: |-------|
-p:   |-----|
-
-0,7 / 2,7
-r: |-------|
-p:   |-------|
-
-0,7 / 10, 2
-r: |-------|
-p:            |--|
-
-TODO: prove this terminates
--/
+-- TODO: prove this terminates
 partial def Map.processWorker: List Process -> List Range -> List Range
   | [], ranges       => ranges
   | _ , []           => []
