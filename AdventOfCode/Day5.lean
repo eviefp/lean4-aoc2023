@@ -97,8 +97,7 @@ partial def Map.processWorker: List Process -> List Range -> List Range
         then r :: Map.processWorker (p :: ps) rs
 
       -- Current range intersects with process
-      else if r.start < processEnd && rangeEnd > p.input
-        then
+      else
           let remainder :=
             { start := processEnd
             , length := rangeEnd - processEnd
@@ -111,7 +110,6 @@ partial def Map.processWorker: List Process -> List Range -> List Range
           if remainder.length == 0
             then processed :: Map.processWorker (p :: ps) rs
             else processed :: Map.processWorker (p :: ps) (remainder :: rs)
-      else panic! s!"{r} {p}"
 
 def Map.process (acc: Array Range) (ps: List Process): Array Range :=
   flip Array.qsort Range.lt
