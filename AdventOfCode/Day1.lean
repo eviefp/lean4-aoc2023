@@ -29,9 +29,9 @@ def findDigit2 (str: String): Option Nat :=
 
 def calculate (n1: Nat) (n2: Nat): Nat := n1 * 10 + n2
 
-def solve (fd: String -> Option Nat) (input: String): Option Nat := do
+def solve (findDigit: String -> Option Nat) (input: String): Option Nat := do
   let slices :=
-    FunctorOf.map2 fd
+    FunctorOf.map2 findDigit
       ∘ FunctorOf.map1 String.slices
       $ input.splitOn "\n"
 
