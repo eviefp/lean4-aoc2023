@@ -5,6 +5,7 @@ import Evie.Prelude
 import Lean.Data.HashMap
 import Lean.Parser
 import Std.Data.Nat.Gcd
+import Std.CodeAction
 
 namespace AdventOfCode.Day8
 open Evie
