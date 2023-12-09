@@ -95,3 +95,17 @@ def Instance: Monoid :=
 end Min
 
 end Nat
+
+namespace Int
+
+namespace Sum
+
+def Instance:  Monoid :=
+  { Carrier := Int
+  , unit := 0
+  , op := Int.add
+  }
+
+end Sum
+
+end Int

@@ -14,6 +14,16 @@ def nat : Lean.Parsec Nat := do
   let optNat <- String.toNat? <$> Lean.Parsec.many1Chars (Lean.Parsec.attempt Lean.Parsec.digit)
   optionToParser optNat "failed to parse nat"
 
+def int : Lean.Parsec Int := do
+  let optSign <- Lean.Parsec.peek!
+  let sign <- match optSign with
+    | '-' => Lean.Parsec.pstring "-"
+    | _   => pure ""
+
+  let intString <- Lean.Parsec.many1Chars (Lean.Parsec.attempt Lean.Parsec.digit)
+  let optInt := String.toInt? (sign ++ intString)
+  optionToParser optInt "failed to parse int"
+
 def parseOptionalChar (c: Char): Lean.Parsec Unit := do
   let hasNext <- Lean.Parsec.peek?
   match hasNext with

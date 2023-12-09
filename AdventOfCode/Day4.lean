@@ -47,7 +47,7 @@ def getWinners (card: Card): List Nat := card.actual.filter card.winning.elem
 
 def solve1: List Card -> Nat :=
   Monoid.Nat.Sum.Instance.fold
-    ∘ List.map ((2 ^ .) ∘ (. - 1))
+    ∘ List.map (λ n => Nat.pow 2 (n - 1))
     ∘ List.filter (. > 0)
     ∘ List.map (List.length ∘ getWinners)
 
