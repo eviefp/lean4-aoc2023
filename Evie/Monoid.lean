@@ -94,6 +94,16 @@ def Instance: Monoid :=
 
 end Min
 
+namespace Max
+
+def Instance: Monoid :=
+  { Carrier := Nat
+  , unit := Nat.zero
+  , op := Nat.max
+  }
+
+end Max
+
 end Nat
 
 namespace Int
