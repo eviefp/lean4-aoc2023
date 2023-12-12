@@ -12,3 +12,10 @@ def catMaybes (l: List (Option α)): List α :=
   l.foldl
     (fun xs => Option.maybe (. :: xs) xs)
     []
+
+def groupsOfTwo: List α -> List (α × α)
+  | []      => []
+  | x :: xs =>
+    List.append
+      (List.foldr (λ y l => (x, y) :: l) [] xs)
+      $ groupsOfTwo xs
