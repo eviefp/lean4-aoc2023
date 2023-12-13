@@ -10,6 +10,7 @@ import AdventOfCode.Day9
 import AdventOfCode.Day10
 import AdventOfCode.Day11
 import AdventOfCode.Day12
+import AdventOfCode.Day13
 
 export AdventOfCode.Day1 (main)
 export AdventOfCode.Day2 (main)
@@ -23,3 +24,4 @@ export AdventOfCode.Day9 (main)
 export AdventOfCode.Day10 (main)
 export AdventOfCode.Day11 (main)
 export AdventOfCode.Day12 (main)
+export AdventOfCode.Day13 (main)

@@ -2,6 +2,9 @@ import Lean.Parser
 
 namespace Evie.Parser
 
+def sum: List (Lean.Parsec α) -> Lean.Parsec α :=
+  List.foldl (λ all p => p <|> all) (Lean.Parsec.fail "")
+
 def optionToParser (o: Option α) (err: String) : Lean.Parsec α :=
   match o with
     | .some res => pure res
