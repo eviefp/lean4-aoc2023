@@ -153,8 +153,8 @@ def Grid.get (grid: Grid x y) (pos: Position x y): Pipe :=
 
 def Grid.update (grid: Grid x y) (pos: Position x y) (p: Pipe): Grid x y :=
   let prev    := grid.pipes.get pos.y
-  let updated := Vector.updateAt p pos.x prev
-  Grid.mk $ grid.pipes.updateAt updated pos.y
+  let updated := Vector.setAt p pos.x prev
+  Grid.mk $ grid.pipes.setAt updated pos.y
 
 def Grid.positions (_grid: Grid x y) : List (Position x y) :=
   let x_range := Nat.range 0 x

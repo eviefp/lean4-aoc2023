@@ -3,6 +3,13 @@ import Evie.Prelude
 namespace Evie.List
 open Evie.Prelude
 
+def replicate' (gen: α -> Option α) (count: Nat) (seed: α): List α :=
+  if count = 0
+  then [seed]
+  else match gen seed with
+    | .none => [seed]
+    | .some next => seed :: replicate' gen (count - 1) next
+
 def product (l1: List α) (l2: List β) : List (α × β) :=
   let go (acc: List (α × β)) (a: α) : List (α × β) :=
     l2.foldl (fun xs b => (a, b) :: xs) acc

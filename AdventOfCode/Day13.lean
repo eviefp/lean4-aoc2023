@@ -25,7 +25,6 @@ abbrev MirroredPatterns := (List Terrain × List Terrain)
 
 abbrev Input := List MirroredPatterns
 
-
 partial def mkPairs (length: Nat) (x y: Nat): List (Nat × Nat) :=
     if x == 0 || y + 1 == length
       then [(x, y)]

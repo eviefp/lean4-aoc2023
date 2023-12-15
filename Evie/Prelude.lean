@@ -1,5 +1,7 @@
 namespace Evie.Prelude
 
+def const: α -> β -> α := λ a _ => a
+
 def curry: (α × β -> γ) -> α -> β -> γ
   | f, a, b => f (a, b)
 
