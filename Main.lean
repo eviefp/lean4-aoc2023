@@ -19,4 +19,5 @@ def main (args: List String): IO Unit := do
     | "13" => Day13.main
     | "14" => Day14.main
     | "15" => Day15.main
+    | "16" => Day16.main
     | _    => IO.println "huh?"

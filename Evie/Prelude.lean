@@ -12,6 +12,10 @@ def Option.maybe (f: α -> β) (b: β): (Option α) -> β
   | .some a => f a
   | .none   => b
 
+def Option.toList: Option α -> List α
+  | .none => []
+  | .some a => [a]
+
 def StateT.modify' [Monad m] (f : σ → σ) : StateT σ m Unit :=
   fun s => pure ((), f s)
 
