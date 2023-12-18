@@ -13,6 +13,11 @@ def optionToParser (o: Option α) (err: String) : Lean.Parsec α :=
 def iterator (iter: String.Iterator) : Lean.Parsec.ParseResult String.Iterator :=
   Lean.Parsec.ParseResult.success iter iter
 
+def digit: Lean.Parsec Nat := do
+  let char <- Lean.Parsec.digit
+  let optNat := String.toNat? char.toString
+  optionToParser optNat "failed to parse digit"
+
 def nat : Lean.Parsec Nat := do
   let optNat <- String.toNat? <$> Lean.Parsec.many1Chars (Lean.Parsec.attempt Lean.Parsec.digit)
   optionToParser optNat "failed to parse nat"
