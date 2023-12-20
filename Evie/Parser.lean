@@ -58,6 +58,9 @@ def sepBy (sep: String) (p: Lean.Parsec α): Lean.Parsec (List α) := do
   let rest <- many (Lean.Parsec.skipString sep *> p)
   pure $ fst :: rest
 
+def identifier: Lean.Parsec String :=
+  Lean.Parsec.many1Chars Lean.Parsec.asciiLetter
+
 def oneOf (chars: List Char): Lean.Parsec Char :=
   Lean.Parsec.satisfy chars.elem
 
