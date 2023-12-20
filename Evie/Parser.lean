@@ -53,6 +53,14 @@ def either (l: Lean.Parsec α) (r: Lean.Parsec β) : Lean.Parsec (α ⊕ β) := 
   let right := Sum.inr <$> r
   left <|> right
 
+def sepBy (sep: String) (p: Lean.Parsec α): Lean.Parsec (List α) := do
+  let fst <- p
+  let rest <- many (Lean.Parsec.skipString sep *> p)
+  pure $ fst :: rest
+
+def oneOf (chars: List Char): Lean.Parsec Char :=
+  Lean.Parsec.satisfy chars.elem
+
 /-- Warning: blows up in IO if the parsing fails -/
 def parseFile (fname: System.FilePath) (parser: Lean.Parsec α): IO α :=
   IO.FS.readFile fname >>= IO.ofExcept ∘ parser.run

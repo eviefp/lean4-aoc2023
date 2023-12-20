@@ -21,3 +21,9 @@ def StateT.modify' [Monad m] (f : σ → σ) : StateT σ m Unit :=
 
 def choice [Alternative f]: List (f α) -> f α :=
   List.foldl (λ acc cur => cur <|> acc) failure
+
+def Prod.both (f: α -> β) (g: γ -> δ) (p: α × γ): β × δ :=
+  (f p.fst, g p.snd)
+
+def Prod.both' (f: α -> β) (p: α × α): β × β :=
+  (f p.fst, f p.snd)
