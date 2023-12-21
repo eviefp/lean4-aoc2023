@@ -132,3 +132,12 @@ def Grid.updateAt (pos: Position x y) (f: α -> α): Grid x y α -> Grid x y α 
   Grid.mk
     ∘ Vector.updateAt pos.y (Vector.updateAt pos.x f)
     ∘ Grid.data
+
+def Grid.find (f: α -> Bool): Grid x y α -> Option (Grid.Position x y) :=
+  Grid.foldlWithIdx
+    (λ (x', y') res a =>
+      if f a
+      then res <|> Grid.Position.mkPosition x y x' y'
+      else res
+    )
+    .none
