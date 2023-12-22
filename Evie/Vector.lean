@@ -2,7 +2,7 @@ import Evie.Prelude
 
 namespace Evie
 
-inductive Vector (α: Type u): Nat -> Type u where
+inductive Vector (α: Type): Nat -> Type where
   | nil : Vector α 0
   | cons: α -> Vector α n -> Vector α (n + 1)
 
