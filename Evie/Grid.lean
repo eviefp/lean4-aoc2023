@@ -1,6 +1,7 @@
 import Evie.List
 import Evie.Prelude
 import Evie.Vector
+import Lean.Data.HashMap
 
 namespace Evie
 open Evie.Prelude
@@ -20,8 +21,6 @@ def Grid.replicate (x: Nat) (y: Nat) (a: α): Grid x y α :=
     ∘ Vector.replicate y
     ∘ Vector.replicate x
     $ a
-
-
 
 def Grid.mapWithPosition (f: (Nat × Nat) -> α -> β): Grid x y α -> Grid x y β :=
   Grid.mk
@@ -141,3 +140,58 @@ def Grid.find (f: α -> Bool): Grid x y α -> Option (Grid.Position x y) :=
       else res
     )
     .none
+
+/-- Find the longest path -/
+partial def Grid.Position.longestPath:
+  Position xn yn ->                                                                 -- start position
+  Position xn yn ->                                                                 -- target position
+  (Position xn yn -> List (Position xn yn) -> List (List (Position xn yn))) ->      -- where to go next, but it may be multiple steps if on a straight line
+  Nat
+  | start, target, next =>
+    let result := (go  target [(start, [])] next).run Lean.HashMap.empty
+    longest result.snd target
+  where
+    go: Position xn yn -> List (Position xn yn × List (Position xn yn)) -> (Position xn yn -> List (Position xn yn) -> List (List (Position xn yn))) -> StateM (Lean.HashMap (Position xn yn) Nat) (List (Position xn yn))
+    | _, [], _                 => pure []
+    | target, (p, path) :: ps, next => do
+      let variants := next p path
+      let variants' <- variants.filterMapM (λ path' => do
+        match path' with
+        | [] => pure .none
+        | p' :: [] =>
+            let current := (p', p :: path)
+            -- 1. see if we got to any of the variants in more steps, in which case, we drop that path
+            -- 2. update state if we do find a longer way to get somewhere
+            if p' == target
+            then
+            StateT.modify' (λ hm' =>
+                match hm'.find? p' with
+                | .none =>  hm'.insert p' (1 + current.snd.length)
+                | .some max =>
+                if max < (1 + current.snd.length)
+                then  hm'.insert p' (1 + current.snd.length)
+                else hm')
+            else pure ()
+            pure $ if p' == target then .none else current
+        | p' :: ps' => do
+            let current := (p', List.append ps' path)
+            -- 1. see if we got to any of the variants in more steps, in which case, we drop that path
+            -- 2. update state if we do find a longer way to get somewhere
+            if p' == target
+            then
+            StateT.modify' (λ hm' =>
+                match hm'.find? p' with
+                | .none => hm'.insert p' (1 + current.snd.length)
+                | .some max =>
+                if max < (1 + current.snd.length)
+                then  hm'.insert p' (1 + current.snd.length)
+                else hm')
+            else pure ()
+            pure $ if p' == target then .none else current
+      )
+      -- 4. continue recursively, and start on the longest path from 1-3 & 'ps' -- but since the current path is the longest, it's always going to be a continuation of it; so we don't need to sort
+      go target (List.append variants' ps) next
+
+    longest (hm: Lean.HashMap (Position xn yn) Nat) (target: Position xn yn): Nat := hm.findD target 0
+
+
